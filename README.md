@@ -18,6 +18,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
     - (Optional) A user should be able to export/download their favourite music as a JSON file.
   - (Optional) Feel free to add other sections to the profile page to flesh it out a bit more.
 - A users profile must be viewable by other users.
+- (Optional) Make some notes on what else you would've added, changed or liked to have done better if given more time.
 
 This is more-or-less a fresh install of NextJS, I've only created an extremely rudamentary signup/login system and file-based database to get you going. As per the installation process, TypeScript and Tailwind CSS is already installed and ready to use.
 
