@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import { EventEmitter } from 'node:events';
 import { storage } from '@/lib/utils';
 
+export interface TableBase {
+  id: string,
+}
+
 class TableEventEmitter extends EventEmitter { };
 
 interface Config {
@@ -10,6 +14,8 @@ interface Config {
 
 export class Table<T> extends Set<T> {
   public events = new TableEventEmitter();
+
+  private pathname: string;
 
   public constructor(values: readonly T[] | null, private config: Config) {
     const filename = `${config.name}.json`;
@@ -26,6 +32,8 @@ export class Table<T> extends Set<T> {
     }
 
     super(JSON.parse(fs.readFileSync(pathname, { encoding: 'utf-8' })));
+
+    this.pathname = pathname;
 
     this.events.addListener('change', () => {
       const file = fs.openSync(pathname, 'w');
@@ -52,6 +60,12 @@ export class Table<T> extends Set<T> {
     return this;
   }
 
+  public clear() {
+    super.clear();
+
+    this.events?.emit('cleared');
+  }
+
   public delete(...args: Parameters<Set<T>['delete']>) {
     const deleted = super.delete(...args);
 
@@ -60,9 +74,19 @@ export class Table<T> extends Set<T> {
     return deleted;
   }
 
-  public clear() {
-    super.clear();
+  public drop() {
+    fs.rmSync(this.pathname);
+  }
 
-    this.events?.emit('cleared');
+  public find(predicate: (row: T) => unknown): T | undefined {
+    return this.toArray().find(predicate);
+  }
+
+  public findMany(predicate: (row: T) => unknown): T[] {
+    return this.toArray().filter(predicate);
+  }
+
+  public toArray(): T[] {
+    return [...this.values()];
   }
 }

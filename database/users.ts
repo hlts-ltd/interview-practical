@@ -1,9 +1,8 @@
-import { Table } from './table';
+import { Table, TableBase } from './table';
 
-export interface User {
+export interface User extends TableBase {
   bio?: string,
   email: string,
-  id: string,
   name: string,
   password: string,
 }
