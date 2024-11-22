@@ -126,6 +126,19 @@ const Page: FC = () => {
     setMusicData(data);
   };
 
+  const downloadJSON = () => {
+    // Create a Blob from the music array in JSON format
+    const jsonBlob = new Blob([JSON.stringify(music, null, 2)], {
+      type: "application/json",
+    });
+
+    // Create a temporary download link
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(jsonBlob);
+    link.download = "favorite_music.json"; // Name of the downloaded file
+    link.click(); // Trigger the download
+  };
+
   return (
     <>
       <div className="flex-1">
@@ -156,10 +169,16 @@ const Page: FC = () => {
                   Edit Profile
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none mr-3"
                   onClick={() => setIsModalVisible(true)}
                 >
                   Add Music
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                  onClick={downloadJSON}
+                >
+                  Download Music
                 </button>
               </>
             )}
