@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { EventEmitter } from 'node:events';
 import { storage } from '@/lib/utils';
 
-export interface TableBase {
+export interface Row {
   id: string,
 }
 
@@ -12,22 +12,19 @@ interface Config {
   name: string,
 }
 
-export class Table<T> extends Set<T> {
+export class Table<R extends Row> extends Set<R> {
   public events = new TableEventEmitter();
 
   private pathname: string;
 
-  public constructor(values: readonly T[] | null, private config: Config) {
+  public constructor(values: readonly R[] | null, private config: Config) {
     const filename = `${config.name}.json`;
     const pathname = storage(`database/${filename}`);
 
     if (!fs.existsSync(pathname)) {
       fs.mkdirSync(pathname.replace(new RegExp(`/${filename}$`), ''), { recursive: true });
-
       const file = fs.openSync(pathname, 'w');
-
       fs.writeFileSync(file, JSON.stringify(values ?? []), { encoding: 'utf-8' });
-
       fs.closeSync(file);
     }
 
@@ -37,24 +34,19 @@ export class Table<T> extends Set<T> {
 
     this.events.addListener('change', () => {
       const file = fs.openSync(pathname, 'w');
-
       fs.writeFileSync(file, JSON.stringify([...this.values()]), { encoding: 'utf-8' });
-
       fs.closeSync(file);
     });
 
     this.events.addListener('cleared', () => {
       const file = fs.openSync(pathname, 'w');
-
       fs.writeFileSync(file, JSON.stringify([]), { encoding: 'utf-8' });
-
       fs.closeSync(file);
     });
   }
 
-  public add(...args: Parameters<Set<T>['add']>) {
+  public add(...args: Parameters<Set<R>['add']>) {
     super.add(...args);
-
     this.events?.emit('change', ...args);
 
     return this;
@@ -62,13 +54,11 @@ export class Table<T> extends Set<T> {
 
   public clear() {
     super.clear();
-
     this.events?.emit('cleared');
   }
 
-  public delete(...args: Parameters<Set<T>['delete']>) {
+  public delete(...args: Parameters<Set<R>['delete']>) {
     const deleted = super.delete(...args);
-
     this.events?.emit('change', ...args);
 
     return deleted;
@@ -78,15 +68,25 @@ export class Table<T> extends Set<T> {
     fs.rmSync(this.pathname);
   }
 
-  public find(predicate: (row: T) => unknown): T | undefined {
+  public find(predicate: (row: R) => unknown): R | undefined {
     return this.toArray().find(predicate);
   }
 
-  public findMany(predicate: (row: T) => unknown): T[] {
+  public findMany(predicate: (row: R) => unknown): R[] {
     return this.toArray().filter(predicate);
   }
 
-  public toArray(): T[] {
+  public update(values: Partial<R>, predicate: (row: R) => unknown): R[] {
+    const rows: R[] = [];
+
+    /** Update rows by object reference. */
+    this.forEach(row => predicate(row) && rows.push(Object.assign(row, values)));
+    this.events?.emit('change');
+
+    return rows;
+  }
+
+  public toArray(): R[] {
     return [...this.values()];
   }
 }

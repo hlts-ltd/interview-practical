@@ -5,9 +5,9 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { faker } from '@faker-js/faker';
 import { storage } from '@/lib/utils';
-import { Table, TableBase } from './table';
+import { Table, Row } from './table';
 
-interface Book extends TableBase {
+interface Book extends Row {
   author: string,
   genre: string,
   title: string,
@@ -130,6 +130,19 @@ describe('Table', () => {
       const actual = books.findMany(({ author }) => author === 'Foo Author');
 
       expect(actual.length).toBe(2);
+    });
+  });
+
+  describe('update', () => {
+    test('updates rows that match the callback', () => {
+      books.add(makeBook());
+      books.add(makeBook({ id: 'foo', title: 'Foo book' }));
+
+      const updated = books.update({ title: 'Foo book updated' }, ({ id }) => id === 'foo');
+      const actual = books.find(({ id }) => id === 'foo');
+
+      expect(updated.length).toBe(1);
+      expect(actual?.title).toBe('Foo book updated');
     });
   });
 });
