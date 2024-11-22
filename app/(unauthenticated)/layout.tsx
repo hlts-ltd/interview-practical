@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from "next";
 import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 import "../globals.css";
 
 export const metadata: Metadata = {

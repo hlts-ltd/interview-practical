@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/Layout';
 import { Logout } from '@/components/Logout';
 
 interface Props {

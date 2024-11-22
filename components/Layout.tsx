@@ -27,7 +27,7 @@ interface Props {
   }
 }
 
-export default async function RootLayout({ children, slotProps }: Props) {
+export async function Layout({ children, slotProps }: Props) {
   return (
     <html lang="en" {...slotProps?.html}>
       <body
