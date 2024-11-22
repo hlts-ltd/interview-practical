@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { redirect, RedirectType } from 'next/navigation';
-import { auth } from '@/lib/auth';
-import Layout from '@/components/Layout';
+import { redirect, RedirectType } from "next/navigation";
+import { auth } from "@/lib/auth";
+import Layout from "@/components/Layout";
 import "../globals.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "HAIDI Practical Assessment",
@@ -17,10 +18,17 @@ interface Props {
 export default async function RootLayout({ children }: Props) {
   const session = await auth.session({ required: false });
 
-  if (session) redirect('/', RedirectType.replace);
+  if (session) redirect("/", RedirectType.replace);
 
   return (
     <Layout>
+      {/* Top Navigation Bar */}
+      <div className="w-full flex justify-between items-center px-6 py-4 bg-gray-800 text-white shadow-md fixed top-0 left-0 z-10">
+        <Link href="/userlist">All Users</Link>
+        <Link href="/auth/login">
+          <button>Login</button>
+        </Link>
+      </div>
       {children}
     </Layout>
   );

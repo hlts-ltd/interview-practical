@@ -1,5 +1,6 @@
-import path from 'node:path';
+import path from "node:path";
 
 export function storage(pathname: string): string {
-  return path.resolve(process.env.ROOT_DIR, './storage/', pathname);
+  const rootDir = process.env.ROOT_DIR || ".";
+  return path.resolve(rootDir, "./storage/", pathname);
 }
