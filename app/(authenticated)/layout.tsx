@@ -14,7 +14,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
   if (!session) redirect('/auth/login', RedirectType.replace);
 
   return (
-    <Layout slotProps={{ body: { className: 'shit on a stick' } }}>
+    <Layout>
       <div className="flex justify-between">
         <p>Welcome, {session.user.name}!</p>
 
