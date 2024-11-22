@@ -13,7 +13,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
   - There must be a section for a users profile image.
     - You **do not** need to handle file upload and storage, you can simply store a URL against the user e.g. using [Faker](https://fakerjs.dev/api/image.html#avatar) for example.
   - There must be a section for a users bio/description.
-  - There must be a section for a users favourite music.
+  - There must be a section for a users favourite songs.
+    - Database columns should include at least: title, artist, genre, rating.
     - A user must be able to add/update/remove music.
     - (Optional) A user should be able to export/download their favourite music as a JSON file.
   - (Optional) Feel free to add other sections to the profile page to flesh it out a bit more.
