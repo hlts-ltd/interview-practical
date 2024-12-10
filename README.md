@@ -23,12 +23,20 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 This is more-or-less a fresh install of NextJS, I've only created an extremely rudamentary signup/login system and file-based database to get you going. As per the installation process, TypeScript and Tailwind CSS is already installed and ready to use.
 
+Jest is set up, however unit tests are optional.
+
 ### Constraints
 
 - Please use TypeScript, not JavaScript.
 - Don't feel you have to use my attempt at a database, no offense will be taken if you would prefer to use a package e.g. [drizzle-orm](https://www.npmjs.com/package/drizzle-orm) instead. However, **please use a file-based database driver** if you do.
 
 Other than that, feel free to use whatever resources you like, whether thats documentation, component libraries or other npm packages to accomplish this practical (within reason, if I see libraries like [this one](https://www.npmjs.com/package/isarray) being used...😑). There isn't a time limit on this, spend as little or as much time as you like (please don't invest too much, this is still only a practical). I encourage you to show off a bit if applicable (maybe comment where you're showing off so I can properly appreciate its splendor).
+
+### What we're looking for in this practical
+
+- Where/how you abstract logic/UI into components.
+- Good architectural principles like abstraction layers.
+- Attention to detail.
 
 ## Getting Started
 
