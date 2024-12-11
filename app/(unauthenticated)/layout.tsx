@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
+import { ToastContainer } from "react-toastify";
 import type { Metadata } from "next";
 import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { Layout } from '@/components/Layout';
 import "../globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "HAIDI Practical Assessment",
@@ -21,7 +23,8 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <Layout>
-      {children}
+        {children}
+        <ToastContainer position="top-right" autoClose={3000} />
     </Layout>
   );
 }
