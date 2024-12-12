@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
-import { User } from '../../../types/user'
+import { User
+
+ } from '../../../types/user'
 
 const USERS_FILE_PATH = path.join(process.cwd(), 'storage/database/users.json')
 

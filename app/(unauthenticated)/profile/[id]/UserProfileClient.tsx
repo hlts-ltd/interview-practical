@@ -1,172 +1,94 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { User } from '../../../../types/user'
+import { useEffect, useState } from 'react'
+import { User, Song } from '../../../../types/user'
+import {
+	fetchSongs,
+	addSong,
+	updateSong,
+	deleteSong,
+} from '../../../../lib/utils/song'
 import { toast } from 'react-toastify'
+import { v4 as uuidv4 } from 'uuid'
+import ProfileDetails from '@/components/ProfileDetails'
+import FavoriteSongs from '@/components/FavoriteSongs'
+import AddSongForm from '@/components/AddSongForm'
 
 export default function UserProfileClient({ user }: { user: User }) {
-	const [isEditing, setIsEditing] = useState(false)
-	const [userDetails, setUserDetails] = useState<User>(user)
+	const [songs, setSongs] = useState<Song[]>([])
+	const [editingSong, setEditingSong] = useState<Song | null>(null)
+	const [showAddSongForm, setShowAddSongForm] = useState(false)
 
-	const handleSaveDetails = async () => {
+	useEffect(() => {
+		fetchSongs(user.id)
+			.then(setSongs)
+			.catch(() => toast.error('Failed to fetch songs.'))
+	}, [user.id])
+
+	const handleAddSong = async (newSong: Omit<Song, 'id'>) => {
 		try {
-			const response = await fetch(`/api/users`, {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(userDetails),
-			})
+			const song = { ...newSong, id: parseInt(uuidv4(), 16) }
+			const addedSong = await addSong(user.id, song)
+			setSongs([...songs, addedSong])
+			setShowAddSongForm(false)
+			toast.success('Song added successfully!')
+		} catch {
+			toast.error('Failed to add song.')
+		}
+	}
 
-			if (!response.ok) {
-				throw new Error('Failed to update user details')
-			}
+	const handleUpdateSong = async (updatedSong: Song) => {
+		try {
+			const song = await updateSong(user.id, updatedSong)
+			setSongs(songs.map((s) => (s.id === song.id ? song : s)))
+			setEditingSong(null)
+			toast.success('Song updated successfully!')
+		} catch {
+			toast.error('Failed to update song.')
+		}
+	}
 
-			const updatedUser = await response.json()
-			setUserDetails(updatedUser)
-			setIsEditing(false)
-			toast.success('User details updated successfully!')
-		} catch (error) {
-			console.error('Error saving user details:', error)
-			toast.error('Failed to update user details.')
+	// Remove a song
+	const handleRemoveSong = async (songId: number) => {
+		try {
+			await deleteSong(user.id, songId)
+			setSongs(songs.filter((s) => s.id !== songId))
+			toast.success('Song removed successfully!')
+		} catch {
+			toast.error('Failed to delete song.')
 		}
 	}
 
 	return (
 		<div className='p-6 max-w-4xl mx-auto'>
-			<div className='bg-white shadow rounded-lg p-6'>
+			<div className='p-6 max-w-4xl mx-auto'>
+				{/* Profile Details */}
+				<ProfileDetails user={user} />
 
-                <div className='flex items-center mb-6'>
-					<div className='w-36 h-36 relative rounded-full overflow-hidden border'>
-						<Image
-							src={
-								userDetails.profileImage ||
-								'https://via.placeholder.com/150'
-							}
-							alt={`${userDetails.name}'s profile`}
-							fill
-							className='object-cover'
-						/>
-					</div>
-					<div className='ml-6'>
-						<h1 className='text-3xl font-bold text-gray-800'>
-							{userDetails.name}
-						</h1>
-						<p className='text-gray-600'>{userDetails.bio}</p>
-					</div>
-				</div>
-
-				<div className='flex justify-end mb-4'>
+				{/* Add Song Section */}
+				{!showAddSongForm && (
 					<button
-						onClick={() => setIsEditing(!isEditing)}
-						className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition'>
-						{isEditing ? 'Cancel' : 'Edit Details'}
+						onClick={() => setShowAddSongForm(true)}
+						className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>
+						Add Song
 					</button>
-				</div>
-
-				{/* Form to edit user detail */}
-				{isEditing ? (
-					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							handleSaveDetails()
-						}}
-						className='space-y-4'>
-						<div>
-							<label className='block text-sm font-medium text-gray-700'>
-								Name
-							</label>
-							<input
-								type='text'
-								value={userDetails.name}
-								onChange={(e) =>
-									setUserDetails({
-										...userDetails,
-										name: e.target.value,
-									})
-								}
-								className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:outline-none'
-								required
-							/>
-						</div>
-						<div>
-							<label className='block text-sm font-medium text-gray-700'>
-								Bio
-							</label>
-							<textarea
-								value={userDetails.bio}
-								onChange={(e) =>
-									setUserDetails({
-										...userDetails,
-										bio: e.target.value,
-									})
-								}
-								className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:outline-none'
-								rows={4}
-								required
-							/>
-						</div>
-						<div>
-							<label className='block text-sm font-medium text-gray-700'>
-								Profile Image URL
-							</label>
-							<input
-								type='url'
-								value={userDetails.profileImage || ''}
-								onChange={(e) =>
-									setUserDetails({
-										...userDetails,
-										profileImage: e.target.value,
-									})
-								}
-								className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:outline-none'
-								required
-							/>
-						</div>
-						<div className='flex justify-end'>
-							<button
-								type='submit'
-								className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition'>
-								Save
-							</button>
-						</div>
-					</form>
-				) : (
-					<div>
-						<h2 className='text-2xl font-semibold text-gray-800 mb-4'>
-							Favorite Songs
-						</h2>
-						{userDetails.favoriteSongs &&
-						userDetails.favoriteSongs.length > 0 ? (
-							<ul className='space-y-4'>
-								{userDetails.favoriteSongs.map(
-									(song, index) => (
-										<li
-											key={index}
-											className='p-4 bg-gray-100 rounded-lg shadow border'>
-											<h3 className='text-lg font-bold text-gray-800'>
-												{song.title}
-											</h3>
-											<p className='text-gray-600'>
-												Artist: {song.artist}
-											</p>
-											<p className='text-gray-600'>
-												Genre: {song.genre}
-											</p>
-											<p className='text-gray-600'>
-												Rating: {song.rating}/5
-											</p>
-										</li>
-									),
-								)}
-							</ul>
-						) : (
-							<p className='text-gray-600'>
-								No favorite songs listed.
-							</p>
-						)}
-					</div>
 				)}
-			</div>
+				{showAddSongForm && (
+					<AddSongForm
+						onSave={handleAddSong}
+						onCancel={() => setShowAddSongForm(false)}
+					/>
+				)}
+
+				{/* Favorite Songs Section */}
+				<FavoriteSongs
+					songs={songs}
+					editingSong={editingSong}
+					onEdit={setEditingSong}
+					onSave={handleUpdateSong}
+					onRemove={handleRemoveSong}
+				/>
+			</div>{' '}
 		</div>
 	)
 }
