@@ -10,7 +10,6 @@ type ProfileDetailsProps = {
 export default function ProfileDetails({ user }: ProfileDetailsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [userDetails, setUserDetails] = useState<User>(user);
-
   const handleSaveDetails = async () => {
     try {
       const response = await fetch(`/api/users`, {
@@ -21,7 +20,7 @@ export default function ProfileDetails({ user }: ProfileDetailsProps) {
 
       if (!response.ok) throw new Error("Failed to update user details");
 
-      const updatedUser = await response.json();
+        const updatedUser = await response.json();
       setUserDetails(updatedUser);
       setIsEditing(false);
       toast.success("User details updated successfully!");
@@ -94,7 +93,7 @@ export default function ProfileDetails({ user }: ProfileDetailsProps) {
             </label>
             <input
               type="url"
-              value={userDetails.profileImage || ""}
+              value={userDetails.profileImage || "https://picsum.photos/id/237/200/300"}
               onChange={(e) =>
                 setUserDetails({ ...userDetails, profileImage: e.target.value })
               }

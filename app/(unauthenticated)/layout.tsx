@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import { Layout } from '@/components/Layout';
 import "../globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import Header from '@/components/Header';
 
 export const metadata: Metadata = {
   title: "HAIDI Practical Assessment",
@@ -23,6 +24,7 @@ export default async function RootLayout({ children }: Props) {
 
   return (
     <Layout>
+		<Header session={session ? session : false} />
         {children}
         <ToastContainer position="top-right" autoClose={3000} />
     </Layout>

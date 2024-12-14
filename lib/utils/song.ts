@@ -1,6 +1,6 @@
 import { Song } from '../../types/user'
 
-export const fetchSongs = async (userId: number): Promise<Song[]> => {
+export const fetchSongs = async (userId: string): Promise<Song[]> => {
 	const response = await fetch(`/api/users/songs?userId=${userId}`)
 	if (!response.ok) throw new Error('Failed to fetch songs')
 	return await response.json()

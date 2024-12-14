@@ -1,8 +1,8 @@
-import { FC, ReactNode } from 'react';
-import { redirect, RedirectType } from 'next/navigation';
-import { auth } from '@/lib/auth';
-import { Layout } from '@/components/Layout';
-import { Logout } from '@/components/Logout';
+import { FC, ReactNode } from 'react'
+import { redirect, RedirectType } from 'next/navigation'
+import { auth } from '@/lib/auth'
+import { Layout } from '@/components/Layout'
+import Header from '@/components/Header'
 
 interface Props {
   children: ReactNode,
@@ -13,17 +13,12 @@ const RootLayout: FC<Props> = async ({ children }) => {
 
   if (!session) redirect('/auth/login', RedirectType.replace);
 
-  return (
-    <Layout>
-      <div className="flex justify-between">
-        <p>Welcome, {session.user.name}!</p>
+	return (
+		<Layout>
+            <Header session={ session ? session : false} />
+			<main className='container mx-auto py-6'>{children}</main>
+		</Layout>
+	)
+}
 
-        <Logout />
-      </div>
-
-      {children}
-    </Layout>
-  );
-};
-
-export default RootLayout;
+export default RootLayout

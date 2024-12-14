@@ -5,6 +5,8 @@ export interface User extends Row {
   email: string,
   name: string,
   password: string,
+  profileImage?: string
+  favoriteSongs: [],
 }
 
 export const users = new Table<User>([], { name: 'users' });
