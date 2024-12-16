@@ -1,5 +1,4 @@
 import { FC, ReactNode } from 'react'
-import { redirect, RedirectType } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { Layout } from '@/components/Layout'
 import Header from '@/components/Header'
@@ -10,8 +9,6 @@ interface Props {
 
 const RootLayout: FC<Props> = async ({ children }) => {
   const session = await auth.session({ required: false });
-
-  if (!session) redirect('/auth/login', RedirectType.replace);
 
 	return (
 		<Layout>

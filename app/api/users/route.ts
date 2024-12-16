@@ -1,36 +1,9 @@
 import { NextResponse } from "next/server";
-import { readFile, writeFile } from "fs/promises";
-import path from "path";
+import { readUsersFromFile, writeUsersToFile } from "@/lib/utils/storage";
 import { User
 
  } from '../../../types/user'
 
-const USERS_FILE_PATH = path.join(process.cwd(), 'storage/database/users.json')
-
-// reuable function to read users
-async function readUsersFromFile(): Promise<User[]> {
-	try {
-		const fileData = await readFile(USERS_FILE_PATH, 'utf-8')
-		return JSON.parse(fileData) as User[]
-	} catch (error) {
-		console.error('Error reading users file:', error)
-		throw new Error('Failed to read users file.')
-	}
-}
-
-// reuable function to write users
-async function writeUsersToFile(users: User[]): Promise<void> {
-	try {
-		await writeFile(
-			USERS_FILE_PATH,
-			JSON.stringify(users, null, 2),
-			'utf-8',
-		)
-	} catch (error) {
-		console.error('Error writing users file:', error)
-		throw new Error('Failed to write users file.')
-	}
-}
 
 // async func to get all users
 export async function GET() {

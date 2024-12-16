@@ -1,14 +1,28 @@
-import { FC } from "react";
-import { signup } from "./signup.action";
+'use client';
 
-const Page: FC = () => {
+import { useState } from 'react';
+import { signup } from "./signup.action";
+import { toast } from 'react-toastify';
+
+export default function SignupForm() {
+    const [error, setError] = useState<string | null>(null);
+    console.log(error)
+    const handleSubmit = async (formData: FormData) => {
+    setError(null);
+    const response = await signup(formData);
+    console.log(response)
+    if (response?.error) {
+      toast.error(response.error)
+      setError(response.error);
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Signup
         </h1>
-        <form action={signup} className="space-y-4">
+        <form action={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="name"
@@ -70,5 +84,3 @@ const Page: FC = () => {
     </div>
   );
 };
-
-export default Page;

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { User, Song } from '../../../../types/user'
+import { Song, ProfileDetailsProps } from '../../../../types/user'
 import {
 	fetchSongs,
 	addSong,
@@ -14,18 +14,18 @@ import ProfileDetails from '@/components/ProfileDetails'
 import FavoriteSongs from '@/components/FavoriteSongs'
 import AddSongForm from '@/components/AddSongForm'
 
-export default function UserProfileClient({ user }: { user: User }) {
+export default function UserProfileClient({ user, canEdit }: ProfileDetailsProps) {
 	const [songs, setSongs] = useState<Song[]>([])
 	const [editingSong, setEditingSong] = useState<Song | null>(null)
 	const [showAddSongForm, setShowAddSongForm] = useState(false)
-
 	useEffect(() => {
 		fetchSongs(user.id)
 			.then(setSongs)
 			.catch(() => toast.error('Failed to fetch songs.'))
 	}, [user.id])
 
-	const handleAddSong = async (newSong: Omit<Song, 'id'>) => {
+    const handleAddSong = async (newSong: Omit<Song, 'id'>) => {
+        if (!canEdit) return;
 		try {
 			const song = { ...newSong, id: parseInt(uuidv4(), 16) }
 			const addedSong = await addSong(user.id, song)
@@ -37,7 +37,8 @@ export default function UserProfileClient({ user }: { user: User }) {
 		}
 	}
 
-	const handleUpdateSong = async (updatedSong: Song) => {
+    const handleUpdateSong = async (updatedSong: Song) => {
+        if (!canEdit) return;
 		try {
 			const song = await updateSong(user.id, updatedSong)
 			setSongs(songs.map((s) => (s.id === song.id ? song : s)))
@@ -49,7 +50,8 @@ export default function UserProfileClient({ user }: { user: User }) {
 	}
 
 	// Remove a song
-	const handleRemoveSong = async (songId: number) => {
+    const handleRemoveSong = async (songId: number) => {
+        if (!canEdit) return;
 		try {
 			await deleteSong(user.id, songId)
 			setSongs(songs.filter((s) => s.id !== songId))
@@ -63,17 +65,17 @@ export default function UserProfileClient({ user }: { user: User }) {
 		<div className='p-6 max-w-4xl mx-auto'>
 			<div className='p-6 max-w-4xl mx-auto'>
 				{/* Profile Details */}
-				<ProfileDetails user={user} />
+                <ProfileDetails user={user} canEdit={canEdit} />
 
 				{/* Add Song Section */}
-				{!showAddSongForm && (
+				{(!showAddSongForm && canEdit) && (
 					<button
 						onClick={() => setShowAddSongForm(true)}
 						className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>
 						Add Song
 					</button>
 				)}
-				{showAddSongForm && (
+				{showAddSongForm && canEdit && (
 					<AddSongForm
 						onSave={handleAddSong}
 						onCancel={() => setShowAddSongForm(false)}
@@ -86,7 +88,8 @@ export default function UserProfileClient({ user }: { user: User }) {
 					editingSong={editingSong}
 					onEdit={setEditingSong}
 					onSave={handleUpdateSong}
-					onRemove={handleRemoveSong}
+                    onRemove={handleRemoveSong}
+                    canEdit={canEdit}
 				/>
 			</div>{' '}
 		</div>

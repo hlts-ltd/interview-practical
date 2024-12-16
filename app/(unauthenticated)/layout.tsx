@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { ToastContainer } from "react-toastify";
 import type { Metadata } from "next";
-import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { Layout } from '@/components/Layout';
 import "../globals.css";
@@ -19,8 +18,6 @@ interface Props {
 
 export default async function RootLayout({ children }: Props) {
   const session = await auth.session({ required: false });
-
-  if (session) redirect('/', RedirectType.replace);
 
   return (
     <Layout>

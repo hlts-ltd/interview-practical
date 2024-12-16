@@ -7,6 +7,7 @@ export default function FavoriteSongs({
   onEdit,
   onSave,
   onRemove,
+  canEdit
 }: FavoriteSongsProps) {
   return (
     <div>
@@ -29,6 +30,26 @@ export default function FavoriteSongs({
                   onChange={(e) => onEdit({ ...editingSong, artist: e.target.value })}
                   className="w-full p-2 border rounded"
                   placeholder="Artist"
+                      />
+                <input
+                  type="text"
+                  placeholder="Genre"
+                  value={editingSong.genre}
+                  onChange={(e) => onEdit({ ...editingSong, genre: e.target.value })}
+                  className="border p-2 rounded w-full"
+                  required
+                />
+                <input
+                  type="number"
+                  placeholder="Rating (1-5)"
+                  value={editingSong.rating}
+                  onChange={(e) =>
+                    onEdit({ ...editingSong, rating: parseInt(e.target.value) })
+                    }
+                  className="border p-2 rounded w-full"
+                  required
+                  min="1"
+                  max="5"
                 />
                 <div className="flex space-x-2 mt-2">
                   <button
@@ -49,7 +70,10 @@ export default function FavoriteSongs({
               <li key={song.id} className="p-4 bg-gray-100 rounded-lg shadow border">
                 <h3 className="text-lg font-bold text-gray-800">{song.title}</h3>
                 <p className="text-gray-600">Artist: {song.artist}</p>
-                <div className="flex space-x-2 mt-2">
+                <p className="text-gray-600">Genre: {song.genre}</p>
+                <p className="text-gray-600">Rating: {song.rating}</p>
+               {canEdit && 
+               <div className="flex space-x-2 mt-2">
                   <button
                     onClick={() => onEdit(song)}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -63,6 +87,7 @@ export default function FavoriteSongs({
                     Remove
                   </button>
                 </div>
+                }
               </li>
             )
           )}

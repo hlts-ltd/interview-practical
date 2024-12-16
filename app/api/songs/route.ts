@@ -1,20 +1,6 @@
 import { NextResponse } from "next/server";
-import { readFile, writeFile } from "fs/promises";
-import path from "path";
-import { User, Song } from "../../../../types/user";
-
-const USERS_FILE_PATH = path.join(process.cwd(), "storage/database/users.json");
-
-// Helper: Read users from the file
-async function readUsersFromFile(): Promise<User[]> {
-  const fileData = await readFile(USERS_FILE_PATH, "utf-8");
-  return JSON.parse(fileData) as User[];
-}
-
-// Helper: Write users to the file
-async function writeUsersToFile(users: User[]): Promise<void> {
-  await writeFile(USERS_FILE_PATH, JSON.stringify(users, null, 2), "utf-8");
-}
+import { readUsersFromFile, writeUsersToFile } from "@/lib/utils/storage";
+import { Song } from "../../../../types/user";
 
 // GET: Retrieve all songs for a specific user
 export async function GET(req: Request) {

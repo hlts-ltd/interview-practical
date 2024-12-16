@@ -1,13 +1,9 @@
 import { useState } from "react";
 import Image from "next/image";
-import { User } from "../types/user";
+import { ProfileDetailsProps, User } from "../types/user";
 import { toast } from "react-toastify";
 
-type ProfileDetailsProps = {
-  user: User;
-};
-
-export default function ProfileDetails({ user }: ProfileDetailsProps) {
+export default function ProfileDetails({ user,canEdit }: ProfileDetailsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [userDetails, setUserDetails] = useState<User>(user);
   const handleSaveDetails = async () => {
@@ -20,7 +16,7 @@ export default function ProfileDetails({ user }: ProfileDetailsProps) {
 
       if (!response.ok) throw new Error("Failed to update user details");
 
-        const updatedUser = await response.json();
+      const updatedUser = await response.json();
       setUserDetails(updatedUser);
       setIsEditing(false);
       toast.success("User details updated successfully!");
@@ -45,7 +41,7 @@ export default function ProfileDetails({ user }: ProfileDetailsProps) {
           <p className="text-gray-600">{userDetails.bio}</p>
         </div>
       </div>
-
+          {canEdit &&
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setIsEditing(!isEditing)}
@@ -54,8 +50,9 @@ export default function ProfileDetails({ user }: ProfileDetailsProps) {
           {isEditing ? "Cancel" : "Edit Details"}
         </button>
       </div>
-
-      {isEditing && (
+}
+    
+      {(isEditing && canEdit)&& (
         <form
           onSubmit={(e) => {
             e.preventDefault();

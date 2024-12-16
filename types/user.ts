@@ -20,9 +20,15 @@ export type FavoriteSongsProps = {
   onEdit: (song: Song | null) => void;
   onSave: (song: Song) => void;
   onRemove: (songId: number) => void;
+  canEdit : boolean
 };
 
 export type AddSongFormProps = {
   onSave: (song: Omit<Song, "id">) => void;
   onCancel: () => void;
+};
+
+export type ProfileDetailsProps = {
+    user: User;
+    canEdit : boolean
 };

@@ -1,25 +1,25 @@
-import { getUsers } from '../../../../lib/utils/users'
-import { User } from '../../../../types/user'
+import { readUsersFromFile } from '@/lib/utils/storage';
 import UserProfileClient from './UserProfileClient'
+import { session } from '@/lib/auth/session';
 
 export default async function UserProfilePage({
 	params,
 }: {
 	params: { id: string }
 }) {
-	console.log(params)
-	const { id } = params
-	const users: User[] = await getUsers()
-	const user = users.find((u) => u.id === parseInt(id))
-
+  const sessionStatus = await session({ required: false });
+  const users = await readUsersFromFile();
+  const user = users.find((u) => u.id === parseInt(params.id, 10));
+  console.log("sessionStatus",sessionStatus?.user.id)
 	if (!user) {
 		return <div className='p-6'>User not found.</div>
 	}
-
+  const canEdit = sessionStatus?.user.id === user.id;
+  console.log(user.id)
     return (
         
 		<div className='p-6 max-w-4xl mx-auto'>
-			<UserProfileClient user={user} />
+			<UserProfileClient user={user} canEdit={canEdit} />
 		</div>
 	)
 }
