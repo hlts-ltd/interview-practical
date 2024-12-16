@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { readUsersFromFile, writeUsersToFile } from "@/lib/utils/storage";
-import { Song } from "../../../../types/user";
+import { Song } from "@/types/user";
 
 // GET: Retrieve all songs for a specific user
 export async function GET(req: Request) {
