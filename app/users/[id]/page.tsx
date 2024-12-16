@@ -49,19 +49,25 @@ export default async function User({
         <div className="flex items-center gap-3">
           {isOwner && <AddSong isOwner={isOwner} />}
 
-          <DownloadSongs songs={songs} />
+          {songs.length > 0 && <DownloadSongs songs={songs} />}
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {songs.map((song) => (
-          <Song
-            key={song.id}
-            song={song}
-            isOwner={currentUser?.id === song.userId}
-          />
-        ))}
-      </div>
+      {songs.length > 0 ? (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {songs.map((song) => (
+            <Song
+              key={song.id}
+              song={song}
+              isOwner={currentUser?.id === song.userId}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center pt-5 text-muted-foreground">
+          No songs Available!
+        </div>
+      )}
     </Container>
   );
 }

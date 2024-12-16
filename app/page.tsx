@@ -30,11 +30,17 @@ export default async function Home({
 
         <p>{resolvedParams.name}</p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {users.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </div>
+        {users.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {users.map((user) => (
+              <UserCard key={user.id} user={user} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center pt-5 text-muted-foreground">
+            No Users Available!
+          </div>
+        )}
       </Container>
     </Suspense>
   );
