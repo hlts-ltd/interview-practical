@@ -5,11 +5,13 @@ import SearchBar from "@/components/SearchBar";
 import UserCard, { UserCardSkeleton } from "@/components/UserCard";
 
 export default async function Home({
-  searchParams: { name },
+  searchParams,
 }: {
-  searchParams: { name: string };
+  searchParams: Promise<{ name?: string }>;
 }) {
-  const users = await getUsers(name);
+  const resolvedParams = await searchParams;
+
+  const users = await getUsers(resolvedParams.name || "");
 
   return (
     <Suspense
@@ -25,6 +27,8 @@ export default async function Home({
         <div className="w-full md:hidden mb-5">
           <SearchBar />
         </div>
+
+        <p>{resolvedParams.name}</p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {users.map((user) => (

@@ -4,7 +4,7 @@ import { db } from "@/database";
 import { users } from "@/database/schema";
 import { desc, eq, ilike, or } from "drizzle-orm";
 
-export const getUsers = async (query?: string) => {
+export const getUsers = async (query?: string | undefined) => {
   let result;
 
   if (query) {

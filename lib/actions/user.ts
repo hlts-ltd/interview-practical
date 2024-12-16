@@ -12,7 +12,7 @@ export const onBoardUser = async () => {
   try {
     const user = await currentUser();
 
-    if (!user) {
+    if (!user || !user.id) {
       return { status: 401, error: "Unauthorized, Youn need to sign in!" };
     }
 
@@ -31,11 +31,10 @@ export const onBoardUser = async () => {
     const newUser = await db
       .insert(users)
       .values({
-        // @ts-ignore
         clerkId: user.id,
         email: user.emailAddresses[0].emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: user.firstName || user.username || "Unknown",
+        lastName: user.lastName || "Unknown",
         image: user.imageUrl,
         bio: "Hello Everyone!",
       })

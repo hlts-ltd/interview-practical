@@ -9,11 +9,13 @@ import UpdateProfile from "@/components/UpdateProfile";
 import DownloadSongs from "@/components/song/DownloadSongs";
 
 export default async function User({
-  params: { id },
+  params,
 }: {
-  params: { id: string };
+  params: Promise<{ id?: string }>;
 }) {
-  const pageUser = await getUserById(+id);
+  const resolvedParams = await params;
+
+  const pageUser = await getUserById(+`${resolvedParams.id}`);
 
   if (!pageUser) {
     return notFound();
