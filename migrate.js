@@ -9,6 +9,9 @@ require("dotenv").config();
 // for migrations
 const migrationClient = postgres(process.env.DATABASE_URL || "", {
   max: 1,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 (async () => {
