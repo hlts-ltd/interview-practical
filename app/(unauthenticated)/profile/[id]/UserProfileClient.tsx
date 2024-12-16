@@ -61,6 +61,21 @@ export default function UserProfileClient({ user, canEdit }: ProfileDetailsProps
 		}
 	}
 
+    const handleExportAsJSON = () => {
+        const json = JSON.stringify(songs, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${user.name}_favorite_songs.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        URL.revokeObjectURL(url);
+    };
+
 	return (
 		<div className='p-6 max-w-4xl mx-auto'>
 			<div className='p-6 max-w-4xl mx-auto'>
@@ -69,11 +84,18 @@ export default function UserProfileClient({ user, canEdit }: ProfileDetailsProps
 
 				{/* Add Song Section */}
 				{(!showAddSongForm && canEdit) && (
-					<button
+                    <>
+                    <button
 						onClick={() => setShowAddSongForm(true)}
 						className='mt-4 px-4 py-2 bg-green-500 text-white rounded'>
 						Add Song
-					</button>
+                    </button>
+                   <button
+						onClick={handleExportAsJSON}
+						className='ml-4 mt-4 px-4 py-2 bg-blue-500 text-white rounded'>
+						Export Songs
+                    </button>
+                    </>
 				)}
 				{showAddSongForm && canEdit && (
 					<AddSongForm
