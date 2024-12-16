@@ -10,7 +10,6 @@ export default function SignupForm() {
     const handleSubmit = async (formData: FormData) => {
     setError(null);
     const response = await signup(formData);
-    console.log(response)
     if (response?.error) {
       toast.error(response.error)
       setError(response.error);

@@ -1,9 +1,17 @@
-import { readFile } from "fs/promises";
-import path from "path";
 import { User } from "../../types/user";
 
-export async function getUsers(): Promise<User[]> {
-  const filePath = path.join(process.cwd(), "storage/database/users.json");
-  const fileData = await readFile(filePath, "utf-8");
-  return JSON.parse(fileData);
-}
+export const fetchUsers = async (): Promise<User[]> => {
+  const response = await fetch('/api/users');
+  if (!response.ok) throw new Error('Failed to fetch users');
+  return await response.json();
+};
+
+export const updateUser = async (user: Partial<User>): Promise<User> => {
+  const response = await fetch('/api/users', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
+  });
+  if (!response.ok) throw new Error('Failed to update user details');
+  return await response.json();
+};

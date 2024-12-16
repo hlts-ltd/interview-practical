@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import UserCard from '../../../components/UserCard'
 import { User } from '@/types/user'
+import { fetchUsers } from '@/lib/utils/users'
+
 
 export default function UserListingPage() {
 	const [users, setUsers] = useState<User[]>([])
@@ -11,12 +13,10 @@ export default function UserListingPage() {
 	// feetching data from users pi to show oand to search the user in realtime
 
 	useEffect(() => {
-		async function fetchUsers() {
+        async function fetchAllUsers() {
 			try {
-				const response = await fetch('/api/users')
-				if (!response.ok) throw new Error('Failed to fetch users')
-				const data = await response.json()
-				setUsers(data)
+            const data = await fetchUsers();
+            setUsers(data);
 			} catch (error) {
 				if (error instanceof Error) {
 					console.error('Error fetching users:', error.message)
@@ -25,7 +25,7 @@ export default function UserListingPage() {
 				}
 			}
 		}
-		fetchUsers()
+		fetchAllUsers()
 	}, [])
 
 	// function to filter user

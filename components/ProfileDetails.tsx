@@ -2,35 +2,28 @@ import { useState } from "react";
 import Image from "next/image";
 import { ProfileDetailsProps, User } from "../types/user";
 import { toast } from "react-toastify";
+import { updateUser } from "@/lib/utils/users";
 
 export default function ProfileDetails({ user,canEdit }: ProfileDetailsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [userDetails, setUserDetails] = useState<User>(user);
   const handleSaveDetails = async () => {
-    try {
-      const response = await fetch(`/api/users`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userDetails),
-      });
-
-      if (!response.ok) throw new Error("Failed to update user details");
-
-      const updatedUser = await response.json();
-      setUserDetails(updatedUser);
-      setIsEditing(false);
-      toast.success("User details updated successfully!");
-    } catch {
-      toast.error("Failed to update user details.");
-    }
-  };
+  try {
+    const updatedUser = await updateUser(userDetails);
+    setUserDetails(updatedUser);
+    setIsEditing(false);
+    toast.success('User details updated successfully!');
+  } catch {
+    toast.error('Failed to update user details.');
+  }
+};
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <div className="flex items-center mb-6">
         <div className="w-36 h-36 relative rounded-full overflow-hidden border">
           <Image
-            src={userDetails.profileImage || "https://via.placeholder.com/150"}
+            src={userDetails?.profileImage ? userDetails?.profileImage : "https://via.placeholder.com/150"}
             alt={`${userDetails.name}'s profile`}
             fill
             className="object-cover"

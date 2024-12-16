@@ -12,7 +12,6 @@ interface Credentials {
 
 export async function authenticate(credentials: Credentials): Promise<Session> {
   const user = Array.from(users).find(({ email, password }) => email === credentials.email && password === hash(credentials.password));
-    console.log(user)
   if (!user) throw new Error('Unauthorised');
 
   const session: Session = { user };
