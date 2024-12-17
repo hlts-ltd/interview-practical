@@ -1,26 +1,29 @@
-import { FC, ReactNode } from 'react';
-import { redirect, RedirectType } from 'next/navigation';
-import { auth } from '@/lib/auth';
-import { Layout } from '@/components/Layout';
-import { Logout } from '@/components/Logout';
+import { FC, ReactNode } from "react";
+import { Layout } from "@/components/Layout";
+import { Navigation } from "@/components/ui/compositions";
+import { redirect, RedirectType } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { updateUser } from "./users/user.action";
+import { service } from "@/lib/services";
 
 interface Props {
-  children: ReactNode,
+  children: ReactNode;
 }
 
 const RootLayout: FC<Props> = async ({ children }) => {
   const session = await auth.session({ required: false });
 
-  if (!session) redirect('/auth/login', RedirectType.replace);
+  const user = await service.getUser(session?.user.id!);
+
+  if (!session) redirect("/auth/login", RedirectType.replace);
 
   return (
     <Layout>
-      <div className="flex justify-between">
-        <p>Welcome, {session.user.name}!</p>
-
-        <Logout />
-      </div>
-
+      <Navigation
+        name={user?.firstName!}
+        updateUserHandler={updateUser}
+        defaultValues={session.user}
+      />
       {children}
     </Layout>
   );
