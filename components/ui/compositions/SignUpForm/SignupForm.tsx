@@ -84,12 +84,8 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({
 
     if (res.data?.type === "success") {
       setFormState("success");
-      {
-        !isModalOpen && redirect("/auth/login");
-      }
-      {
-        isModalOpen && router.refresh();
-      }
+      !isModalOpen && redirect("/auth/login");
+      isModalOpen && router.refresh();
     } else {
       console.error("Error submitting form", res);
       setFormState("error");

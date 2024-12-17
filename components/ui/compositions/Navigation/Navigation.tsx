@@ -57,8 +57,8 @@ export const Navigation: React.FC<NavigationProps> = ({
         <SignUpForm
           updateUserHandler={updateUserHandler}
           isModalOpen={isModalOpen}
-          formErrorMsg=""
-          formSuccessMsg=""
+          formErrorMsg="Something went wrong"
+          formSuccessMsg="Successfully updated user profile"
           defaultValues={defaultValues}
         />
       </Modal>

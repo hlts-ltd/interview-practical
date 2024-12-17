@@ -4,6 +4,7 @@ import { Navigation } from "@/components/ui/compositions";
 import { redirect, RedirectType } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { updateUser } from "./users/user.action";
+import { service } from "@/lib/services";
 
 interface Props {
   children: ReactNode;
@@ -12,12 +13,14 @@ interface Props {
 const RootLayout: FC<Props> = async ({ children }) => {
   const session = await auth.session({ required: false });
 
+  const user = await service.getUser(session?.user.id!);
+
   if (!session) redirect("/auth/login", RedirectType.replace);
 
   return (
     <Layout>
       <Navigation
-        name={session.user.firstName}
+        name={user?.firstName!}
         updateUserHandler={updateUser}
         defaultValues={session.user}
       />
