@@ -213,14 +213,17 @@ export const FavoriteSongsTable: React.FC<FavoriteSongsTableProps> = ({
           }
           className="w-[50%] mt-0 mb-2"
         />
-        {session?.id === id && (
-          <Button
-            type="submit"
-            label="Add Song"
-            mode="add"
-            onClick={handleOpenModal}
-          />
-        )}
+
+        <Button
+          type="submit"
+          className={`${
+            session?.id !== id && " text-gray-500 cursor-not-allowed"
+          }`}
+          label="Add Song"
+          mode="add"
+          onClick={handleOpenModal}
+          disabled={session?.id !== id}
+        />
       </div>
       <div className="mt-2 rounded-lg overflow-hidden border border-border">
         <Table className="border">
