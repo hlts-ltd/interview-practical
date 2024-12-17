@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
+import { ToastContainer } from "react-toastify";
 import type { Metadata } from "next";
-import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { Layout } from '@/components/Layout';
 import "../globals.css";
+import "react-toastify/dist/ReactToastify.css";
+import Header from '@/components/Header';
 
 export const metadata: Metadata = {
   title: "HAIDI Practical Assessment",
@@ -17,11 +19,11 @@ interface Props {
 export default async function RootLayout({ children }: Props) {
   const session = await auth.session({ required: false });
 
-  if (session) redirect('/', RedirectType.replace);
-
   return (
     <Layout>
-      {children}
+		<Header session={session ? session : false} />
+        {children}
+        <ToastContainer position="top-right" autoClose={3000} />
     </Layout>
   );
 }

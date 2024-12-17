@@ -3,7 +3,7 @@ import { EventEmitter } from 'node:events';
 import { storage } from '@/lib/utils';
 
 export interface Row {
-  id: string,
+  id: number,
 }
 
 class TableEventEmitter extends EventEmitter { };
