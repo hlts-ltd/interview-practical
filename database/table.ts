@@ -72,8 +72,8 @@ export class Table<R extends Row> extends Set<R> {
     return this.toArray().find(predicate);
   }
 
-  public findMany(predicate: (row: R) => unknown): R[] {
-    return this.toArray().filter(predicate);
+  public findMany(predicate?: (row: R) => unknown): R[] {
+    return predicate ? this.toArray().filter(predicate) : this.toArray();
   }
 
   public update(values: Partial<R>, predicate: (row: R) => unknown): R[] {
