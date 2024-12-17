@@ -1,28 +1,19 @@
-import { FC } from 'react';
-import Link from 'next/link';
-import { login } from './login.action';
+import { FC } from "react";
+import { login } from "./login.action";
+import { Login } from "@/components/ui/layouts/Login";
 
 const Page: FC = () => {
   return (
-    <form action={login}>
-      <div>
-        <input autoComplete="username" name="email" type="email" />
-      </div>
-
-      <div>
-        <input autoComplete="current-password" name="password" type="password" />
-      </div>
-
-      <button type="submit">
-        Login
-      </button>
-
-      <hr />
-
-      <p>
-        No account? <Link href="/auth/signup">Signup</Link>
-      </p>
-    </form>
+    <>
+      <Login
+        formErrorMsg="Invalid username or password"
+        formSuccessMsg="Successfully logged in"
+        formInfo=""
+        formTitle="SIGN IN"
+        title=""
+        LoginHandler={login}
+      />
+    </>
   );
 };
 

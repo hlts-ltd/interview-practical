@@ -71,14 +71,10 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 Once you are happy with your work, open a pull request back into the source repository to be reviewed. It will be reviewed the day before your interview, so feel free to push changes once the pull request is opened.
 
-You will be emailed a link within 24 hours of your virtual technical interview.
-
-**Please ensure the following**:
+Please ensure the following:
 - We will be using your application in production mode, so please ensure your application builds successfully when `npm run build` is executed.
   - We will attempt dev-mode if production mode doesn't work for whatever reason, however, tut-tut-tut. If we think there is enough time, we will try to give you an opportunity to fix any build errors.
-- **Your practical should require no additional setup outside of running `npm run build` and `npm run start`.**
 - Please make sure your database files are committed so we can use your application as you were using it.
-- Please include any relevant environment variables required for your practical to work in a `.env.submission` file.
 
 ## Learn More
 

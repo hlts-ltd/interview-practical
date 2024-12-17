@@ -32,7 +32,7 @@ export async function Layout({ children, slotProps }: Props) {
     <html lang="en" {...slotProps?.html}>
       <body
         {...slotProps?.body}
-        className={[`${geistSans.variable} ${geistMono.variable} antialiased`, slotProps?.body?.className].filter(Boolean).join(' ')}
+        className={[`${geistSans.variable} ${geistMono.variable} antialiased `, slotProps?.body?.className].filter(Boolean).join(' ')}
       >
         {children}
       </body>

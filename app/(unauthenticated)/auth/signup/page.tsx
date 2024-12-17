@@ -1,25 +1,20 @@
 import { FC } from 'react';
 import { signup } from './signup.action';
+import { SignUp } from "@/components/ui/layouts/SignUp";
 
 const Page: FC = () => {
   return (
-    <form action={signup}>
-      <div>
-        <input name="name" placeholder="Enter your name..." required />
-      </div>
-
-      <div>
-        <input name="email" placeholder="Enter your email..." required type="email" />
-      </div>
-
-      <div>
-        <input name="password" placeholder="Enter your password..." required type="password" />
-      </div>
-
-      <button type="submit">
-        Signup
-      </button>
-    </form>
+    <>
+      <SignUp
+        formErrorMsg="Invalid details"
+        formSuccessMsg="Sign up successful"
+        formInfo=""
+        formTitle="SIGN UP"
+        title=""
+        signUpHandler={signup}
+        isModalOpen={false}
+      />
+    </>
   );
 };
 

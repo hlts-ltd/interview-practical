@@ -1,10 +1,11 @@
 import { Table, Row } from './table';
 
 export interface User extends Row {
-  bio?: string,
-  email: string,
-  name: string,
-  password: string,
+  email: string;
+  firstName: string;
+  lastName: string;
+  biography: string;
+  password: string;
 }
 
 export const users = new Table<User>([], { name: 'users' });

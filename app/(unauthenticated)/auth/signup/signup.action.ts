@@ -1,13 +1,41 @@
-'use server';
-import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
+"use server";
+import { auth } from "@/lib/auth";
+import { actionClient } from "@/lib/safe-action";
 
-export async function signup(data: FormData) {
-  void await auth.signup({
-    email: data.get('email'),
-    name: data.get('name'),
-    password: data.get('password'),
-  });
+import { z } from "zod";
 
-  redirect('/auth/login');
-}
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(100),
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  biography: z.string(),
+});
+
+export const signup = actionClient
+  .schema(schema)
+  .action(
+    async ({
+      parsedInput: { email, firstName, lastName, biography, password },
+    }) => {
+      const user = auth.signup({
+        email,
+        firstName,
+        lastName,
+        biography,
+        password,
+      });
+
+      if (user) {
+        return {
+          type: "success",
+          message: "Successfully create user",
+        };
+      }
+
+      return {
+        type: "failure",
+        message: "Something went wrong, please try again",
+      };
+    }
+  );
