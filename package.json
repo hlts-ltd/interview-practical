@@ -10,6 +10,9 @@
     "init": "echo \"ROOT_DIR=`pwd`\" > .env",
     "test": "jest"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "overrides": {
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106"
