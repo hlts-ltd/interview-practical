@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { EventEmitter } from 'node:events';
-import { storage } from '@/lib/utils';
+import { storage } from '@/lib/utils/index';
 
 export interface Row {
   id: string,

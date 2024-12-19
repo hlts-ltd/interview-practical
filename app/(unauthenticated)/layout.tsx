@@ -4,6 +4,7 @@ import { redirect, RedirectType } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { Layout } from '@/components/Layout';
 import "../globals.css";
+import { getAuth } from '@/lib/auth/cookie';
 
 export const metadata: Metadata = {
   title: "HAIDI Practical Assessment",
@@ -15,9 +16,10 @@ interface Props {
 }
 
 export default async function RootLayout({ children }: Props) {
-  const session = await auth.session({ required: false });
 
-  if (session) redirect('/', RedirectType.replace);
+    const { user } = await getAuth();
+  
+    if (user) redirect('/', RedirectType.replace);
 
   return (
     <Layout>

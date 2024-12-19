@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { faker } from '@faker-js/faker';
-import { storage } from '@/lib/utils';
+import { storage } from '@/lib/utils/index';
 import { Table, Row } from './table';
 
 interface Book extends Row {
