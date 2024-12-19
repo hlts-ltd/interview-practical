@@ -31,7 +31,7 @@ It's a very rough application missing proper validation, error handling, clean f
 ### Improvements
 Here are some of the things that can be improved on:
 
-- Validating all forms/inputs using toast notifications
+- Validating all forms/inputs using Zod and  toast notifications for the client side
 - Deleting files/folders and npm packages that are not being used e.g. shadcn ui, old session file etc.
 - Better folder/file structures, actions can be grouped together in a folder for example
 - Better typing using interfaces/types
